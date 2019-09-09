@@ -1,152 +1,76 @@
 // To parse this JSON data, do
 //
 //     final answer = answerFromJson(jsonString);
+class Movies{
+  List<Movie> items = new List();
 
-import 'dart:convert';
+  Movies();
+  Movies.fromJsonList( List<dynamic>jsonList){
+   if(jsonList==null)return;
 
-Answer answerFromJson(String str) => Answer.fromJson(json.decode(str));
-
-String answerToJson(Answer data) => json.encode(data.toJson());
-
-class Answer {
-  List<Result> results;
-  int page;
-  int totalResults;
-  Dates dates;
-  int totalPages;
-
-  Answer({
-    this.results,
-    this.page,
-    this.totalResults,
-    this.dates,
-    this.totalPages,
-  });
-
-  factory Answer.fromJson(Map<String, dynamic> json) => new Answer(
-    results: new List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
-    page: json["page"],
-    totalResults: json["total_results"],
-    dates: Dates.fromJson(json["dates"]),
-    totalPages: json["total_pages"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "results": new List<dynamic>.from(results.map((x) => x.toJson())),
-    "page": page,
-    "total_results": totalResults,
-    "dates": dates.toJson(),
-    "total_pages": totalPages,
-  };
+   for (var item in jsonList){
+     final movie = Movie.fromJsonMap(item);
+     items.add(movie);
+   }
+  }
 }
 
-class Dates {
-  DateTime maximum;
-  DateTime minimum;
 
-  Dates({
-    this.maximum,
-    this.minimum,
-  });
-
-  factory Dates.fromJson(Map<String, dynamic> json) => new Dates(
-    maximum: DateTime.parse(json["maximum"]),
-    minimum: DateTime.parse(json["minimum"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "maximum": "${maximum.year.toString().padLeft(4, '0')}-${maximum.month.toString().padLeft(2, '0')}-${maximum.day.toString().padLeft(2, '0')}",
-    "minimum": "${minimum.year.toString().padLeft(4, '0')}-${minimum.month.toString().padLeft(2, '0')}-${minimum.day.toString().padLeft(2, '0')}",
-  };
-}
-
-class Result {
-  double popularity;
+class Movie {
   int voteCount;
-  bool video;
-  String posterPath;
   int id;
-  bool adult;
-  String backdropPath;
-  OriginalLanguage originalLanguage;
+  bool video;
+  double voteAverage;
+  String title;
+  double popularity;
+  String posterPath;
   String originalTitle;
   List<int> genreIds;
-  String title;
-  double voteAverage;
+  String backdropPath;
+  bool adult;
   String overview;
   DateTime releaseDate;
 
-  Result({
-    this.popularity,
+  Movie({
     this.voteCount,
-    this.video,
-    this.posterPath,
     this.id,
-    this.adult,
-    this.backdropPath,
-    this.originalLanguage,
+    this.video,
+    this.voteAverage,
+    this.title,
+    this.popularity,
+    this.posterPath,
     this.originalTitle,
     this.genreIds,
-    this.title,
-    this.voteAverage,
+    this.backdropPath,
+    this.adult,
     this.overview,
     this.releaseDate,
   });
 
-  factory Result.fromJson(Map<String, dynamic> json) => new Result(
-    popularity: json["popularity"].toDouble(),
-    voteCount: json["vote_count"],
-    video: json["video"],
-    posterPath: json["poster_path"],
-    id: json["id"],
-    adult: json["adult"],
-    backdropPath: json["backdrop_path"],
-    originalLanguage: originalLanguageValues.map[json["original_language"]],
-    originalTitle: json["original_title"],
-    genreIds: new List<int>.from(json["genre_ids"].map((x) => x)),
-    title: json["title"],
-    voteAverage: json["vote_average"].toDouble(),
-    overview: json["overview"],
-    releaseDate: DateTime.parse(json["release_date"]),
-  );
+  Movie.fromJsonMap(Map<String, dynamic> json){
+    voteCount       = json['vote_count'];
+    id              = json['id'];
+    video           = json['video'];
+    voteAverage     = json['vote_average']    /1;
+    title           = json['title'];
+    popularity      = json['popularity']      /1;
+    posterPath      = json['poster_path'];
+    originalTitle   = json['original_title'];
+    genreIds        = json['genre_id'].cast   <int>();
+    backdropPath    = json['blackdrop_path'];
+    adult           = json['adult'];
+    overview        = json['overview'];
+    releaseDate      = json['release_date'];
 
-  Map<String, dynamic> toJson() => {
-    "popularity": popularity,
-    "vote_count": voteCount,
-    "video": video,
-    "poster_path": posterPath,
-    "id": id,
-    "adult": adult,
-    "backdrop_path": backdropPath,
-    "original_language": originalLanguageValues.reverse[originalLanguage],
-    "original_title": originalTitle,
-    "genre_ids": new List<dynamic>.from(genreIds.map((x) => x)),
-    "title": title,
-    "vote_average": voteAverage,
-    "overview": overview,
-    "release_date": "${releaseDate.year.toString().padLeft(4, '0')}-${releaseDate.month.toString().padLeft(2, '0')}-${releaseDate.day.toString().padLeft(2, '0')}",
-  };
-}
-
-enum OriginalLanguage { EN, TL, KO, ID }
-
-final originalLanguageValues = new EnumValues({
-  "en": OriginalLanguage.EN,
-  "id": OriginalLanguage.ID,
-  "ko": OriginalLanguage.KO,
-  "tl": OriginalLanguage.TL
-});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    if (reverseMap == null) {
-      reverseMap = map.map((k, v) => new MapEntry(v, k));
-    }
-    return reverseMap;
   }
+
+  getPosterImg(){
+    if(posterPath == null) {
+       return 'https://www.eecs.utk.edu/wp-content/uploads/2016/02/Googe_EECS.jpg';
+    }
+    else {
+      return'https://image.tmdb.org/t/p/w185_and_h278_bestv2/$posterPath';
+    }
+  }
+
 }
