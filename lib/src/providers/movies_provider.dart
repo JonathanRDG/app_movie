@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:app_movie/src/models/movie_model.dart';
 import 'package:http/http.dart'as http;
 
@@ -19,7 +18,7 @@ class MoviesProvider {
     final answ = await http.get(url);
     final decodedData = json.decode(answ.body);
     final movies = new Movies.fromJsonList(decodedData['results']);
-    print(movies.items[0]);
-    return[];
+
+    return movies.items;
   }
 }

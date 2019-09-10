@@ -1,23 +1,20 @@
-
 class Movies{
   List<Movie> items = new List();
-      Movies();
-      Movies.fromJsonList(List<dynamic>jsonList){
-        if (jsonList == null) return;
+  Movies();
+  Movies.fromJsonList(List<dynamic>jsonList){
+    if (jsonList == null) return;
 
-        for(var item in jsonList) {
-        final movie = new Movie.fromJsonMap(item);
-        items.add(movie);
-        }
-      }
+    for(var item in jsonList) {
+      final movie = new Movie.fromJsonMap(item);
+      items.add(movie);
+    }
+  }
 }
 
 class Movie {
+  double popularity;
   int voteCount;
   bool video;
-  double voteAverage;
-  String title;
-  double popularity;
   String posterPath;
   int id;
   bool adult;
@@ -25,23 +22,24 @@ class Movie {
   String originalLanguage;
   String originalTitle;
   List<int> genreIds;
+  String title;
+  double voteAverage;
   String overview;
 
   Movie({
-
-    this.voteCount,
-    this.id,
-    this.video,
-    this.voteAverage,
-    this.title,
     this.popularity,
+    this.voteCount,
+    this.video,
     this.posterPath,
+    this.id,
+    this.adult,
+    this.backdropPath,
+    this.originalLanguage,
     this.originalTitle,
     this.genreIds,
-    this.backdropPath,
-    this.adult,
+    this.title,
+    this.voteAverage,
     this.overview,
-
 
   });
   Movie.fromJsonMap(Map<String, dynamic> json){
@@ -61,5 +59,13 @@ class Movie {
     overview         = json['overview'];
 
   }
-}
 
+  getPosterImg() {
+    if (posterPath == null) {
+      return "https://www.vermeer.com.au/wp-content/uploads/2016/12/attachment-no-image-available.png";
+    }
+    else {
+      return "https://image.tmdb.org/t/p/w500/$posterPath";
+    }
+  }
+}
