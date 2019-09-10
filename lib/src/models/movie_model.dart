@@ -15,7 +15,7 @@ class Movie {
   double popularity;
   int voteCount;
   bool video;
-  String posterPath;
+  String posterPath;git
   int id;
   bool adult;
   String backdropPath;
