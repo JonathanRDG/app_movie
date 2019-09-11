@@ -8,6 +8,7 @@ class HomePage extends StatelessWidget {
   final moviesProvider = new MoviesProvider();
   @override
   Widget build(BuildContext context) {
+    moviesProvider.getPopular();
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -37,13 +38,10 @@ class HomePage extends StatelessWidget {
     return FutureBuilder(
       future: moviesProvider.getInTeaters(),
       builder: (BuildContext context, AsyncSnapshot<List> snapshot){
-        print(snapshot.data);
-        if (snapshot.hasData)
-          {
+        if (snapshot.hasData) {
             return CardSwiper(movie: snapshot.data );
           }
-        else
-          {
+        else {
             return Container(
                 height: 400.0,
                 child: Center(
@@ -66,17 +64,22 @@ class HomePage extends StatelessWidget {
               child: Text('Populares', style: Theme.of(context).textTheme.subhead)
           ),
           SizedBox(height: 5.0),
-          FutureBuilder(
-            future: moviesProvider.getPopular(),
+          StreamBuilder(
+            stream: moviesProvider.popularStream,
             builder: (BuildContext context,  AsyncSnapshot<List> snapshot){
-              if (snapshot.hasData)
-              {
+              if (snapshot.hasData) {
                 //snapshot.data?.forEach( (p) => print(p.title)  );
-                return MovieHorizontal(movies: snapshot.data);
+                return MovieHorizontal(
+                  movies: snapshot.data,
+                  nextPage: moviesProvider.getPopular,
+                );
               }
-              else
-              {
-                return CircularProgressIndicator();
+              else {
+                return Container(
+                    child:Center(
+                        child: CircularProgressIndicator()
+                    )
+                );
               }
               },
           ),

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:app_movie/src/models/movie_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart'as http;
 
 class MoviesProvider {
@@ -10,6 +9,7 @@ class MoviesProvider {
   String _language = 'es-ES';
   String _page = '1';
   int _pupularPage = 0;
+  bool _loading = false;
 
   List<Movie>_popular =  new List();
 
@@ -34,6 +34,9 @@ class MoviesProvider {
   }
 
   Future<List<Movie>>getPopular() async {
+    if(_loading) return [];
+
+    _loading = true;
     _pupularPage++;
     final url = Uri.http(_url, '3/movie/popular',{
       'api_key' : _apikey,
@@ -44,6 +47,7 @@ class MoviesProvider {
     final answ = await _processAnswer(url);
     _popular.addAll(answ);
     popularSink(_popular);
+    _loading= false;
     return answ;
 
   }
