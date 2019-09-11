@@ -40,7 +40,7 @@ class MovieHorizontal extends StatelessWidget {
             borderRadius: BorderRadius.circular(20.0),
             child:FadeInImage(
               image: NetworkImage(movie.getPosterImg()),
-              placeholder: AssetImage('assets/img/no-image.jpg'),
+              placeholder: AssetImage('assets/img/loading.gif'),
               fit: BoxFit.cover,
               height: MediaQuery.of(context).size.height*.16 ,
             ),
