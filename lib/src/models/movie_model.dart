@@ -12,6 +12,7 @@ class Movies{
 }
 
 class Movie {
+  String uniqueId;
   double popularity;
   int voteCount;
   bool video;
@@ -68,4 +69,14 @@ class Movie {
       return "https://image.tmdb.org/t/p/w500/$posterPath";
     }
   }
+
+  getBackgroundImg() {
+    if (posterPath == null) {
+      return "https://www.vermeer.com.au/wp-content/uploads/2016/12/attachment-no-image-available.png";
+    }
+    else {
+      return "https://image.tmdb.org/t/p/w500/$backdropPath";
+    }
+  }
+
 }

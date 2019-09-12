@@ -1,4 +1,5 @@
 import 'package:app_movie/src/providers/movies_provider.dart';
+import 'package:app_movie/src/search/search_delegate.dart';
 import 'package:app_movie/src/widget/card_swiper_widget.dart';
 import 'package:app_movie/src/widget/movie_horizontal.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     moviesProvider.getPopular();
     return Scaffold(
+      backgroundColor: Color(0xff222222),
       appBar: AppBar(
         centerTitle: false,
         title: Text('Peliculas en Cines'),
@@ -17,7 +19,11 @@ class HomePage extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
-            onPressed: (){},
+            onPressed: (){
+             showSearch(
+                 context: context,
+                 delegate: DataSearch() );
+            },
           )
         ],
       ),
@@ -61,7 +67,10 @@ class HomePage extends StatelessWidget {
         children: <Widget>[
           Container(
             padding: EdgeInsets.only(left: 20.0),
-              child: Text('Populares', style: Theme.of(context).textTheme.subhead)
+              child: Center(
+                  child: Text('Populares', style: TextStyle(
+                    color: Colors.white
+                  ),))
           ),
           SizedBox(height: 5.0),
           StreamBuilder(
